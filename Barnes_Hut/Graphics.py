@@ -27,10 +27,16 @@ class Graphics(Frame):
     def add_stars(self):
         make = self.uni.add_star
         i = 0
+        cont = 0
         while i < self.N:
             try:
                 star = self.star_queue.get(block = False)
-            except: pass #raise
+            except:
+                if i > 3:
+                    if cont == 5: break
+                    time.sleep(0.2)
+                    cont += 1
+                    print "Star Queue Empty... {}".format(cont)
             else:
                 make(star)
                 i+=1
@@ -39,7 +45,6 @@ class Graphics(Frame):
         make = self.uni.add_box
         i = 0
         cont = 0
-        made_one=False
         while True:
             try:
                 node = self.tree_queue.get(block = False)

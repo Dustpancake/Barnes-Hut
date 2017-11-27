@@ -21,7 +21,7 @@ print "Rendering took {}s".format(t)
 
 root.protocol("WM_DELETE_WINDOW", on_close)
 
-root.mainloop()
+#root.mainloop()
 
 sleep(2)
 window.close()

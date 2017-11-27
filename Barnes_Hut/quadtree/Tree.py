@@ -1,22 +1,31 @@
 import numpy as np
 from Node import BarnesHut
 from ..Support import Config
+from ..stellar_objects.GravityHandler import GravityCalc
 import time
+import sys
 
 class QuadTree(BarnesHut):
     def __init__(self):
         self.get_config()
         BarnesHut.__init__(self)
+        self.gc = GravityCalc()
 
     def get_config(self):
         cp = Config()
         self.depth = cp.get("QuadTreeConfig", "depth")
-        self.minimum = cp.get("QuadTreeConfig", "maximum")
+        self.maximum = cp.get("QuadTreeConfig", "maximum")
+        if self.maximum != None:
+            try:
+                self.maximum = int(self.maximum)
+            except:
+                self.maximum = 1
 
     LEAVES = []
     def find_leaf(self):
+        obj = self.maximum
         for node in self.ALLNODES:
-            if len(node.STARS) == 1:
+            if len(node.STARS) == self.maximum:
                 self.LEAVES.append(node)
         print len(self.LEAVES)
 
@@ -28,6 +37,12 @@ class QuadTree(BarnesHut):
         self.new_depth()
         self.find_leaf()
         print "Tree building took {}s".format(time.time() - t)
+        print "Tree bytes is", sys.getsizeof(self.ALLNODES)
+        self.gc.give_tree(self.NODES, self.LEAVES)
+        self.gc.calculate()
+
+        #print "Tree building2 took {}s".format(time.time() - t)
+
 
     def get_all_nodes(self):
         return self.ALLNODES
@@ -45,5 +60,8 @@ class QuadTree(BarnesHut):
             temp = np.array([node.POS, node.POS + node.REGION]).copy().flatten()
             res.append(temp)
         return res
+
+    def kill(self):
+        self.gc.kill()
 
 

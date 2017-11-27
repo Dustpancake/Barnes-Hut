@@ -3,7 +3,7 @@ from multiprocessing import Process, Queue
 from quadtree.Tree import QuadTree
 import time
 
-class LogicHandler(Process):
+class LogicHandler(Process, object):
     STAR_WIDGETS = []
     def __init__(self):
         Process.__init__(self)
@@ -34,8 +34,16 @@ class LogicHandler(Process):
     def run(self):
         self.tree.construct(self.ALL_OBJECTS)
         tree = self.tree.get_all_leaf_positions()
-        self.give_tree(tree)
+        self.QUEUES, self.RECEIVERS = self.give_tree(tree)
         while True:
             time.sleep(2)
+            self.listen()
+
+    def listen(self):
+        pass
+
+    def terminate(self):
+        self.tree.kill()
+        super(LogicHandler, self).terminate()
 
 

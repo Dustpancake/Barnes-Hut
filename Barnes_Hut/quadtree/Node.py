@@ -8,6 +8,7 @@ class BarnesHut(object):
     MASS = 0
     REGION = []
     ALLNODES = []
+
     def new_depth(self):
         for region in self.subregions():
             stars, _region = self.find_stars(region)
@@ -57,7 +58,6 @@ class BarnesHut(object):
         ycoord = np.where(pos[:, 1] > y1, pos[:, 1], y2+1)
         ycoord = np.where(ycoord < y2, 1, 0)
         pos = np.where(xcoord + ycoord == 2, True, False)
-        #print region
         res = self.STARS[pos]
         return res, np.array([[x1, x2], [y1, y2]])
 
@@ -89,3 +89,7 @@ class Node(BarnesHut):
         mins = self.REGION[:, 0]
         self.POS = mins.copy()
         self.REGION = (maxs - mins).copy()
+
+    def __iter__(self):
+        for node in self.NODES:
+            yield node
