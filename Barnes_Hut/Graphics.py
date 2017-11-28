@@ -13,7 +13,7 @@ class Graphics(Frame):
         self.start_logic()
         self.cp = Config()
         self.get_key_values()
-        self.after(10, self.update_frame)
+        self.update_frame()
 
     def start_logic(self):
         self.logic = LogicHandler()
@@ -60,7 +60,10 @@ class Graphics(Frame):
                 i+=1
 
     def update_frame(self):
-        pass
+        self.uni.canv.delete("all")
+        self.add_stars()
+        self.add_tree()
+        self.after(1000, self.update_frame)
 
     def close(self):
         while True:

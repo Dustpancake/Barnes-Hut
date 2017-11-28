@@ -13,19 +13,18 @@ class GravityCalc(TreeTrans):
         cp = Config()
         self.G = float(cp.get("GeneralValues", "G"))
         self.noP = int(cp.get("CalculatorValues", "number of processes"))
-        start_t = int(cp.get("CalculatorValues", "start time"))
-        end_t = int(cp.get("CalculatorValues", "end time"))
-        time_steps = int(cp.get("CalculatorValues", "time steps"))
+        start_t = float(cp.get("CalculatorValues", "start time"))
+        time_step = float(cp.get("CalculatorValues", "time step"))
         self.theta = float(cp.get("CalculatorValues", "theta"))
         self.eta = float(cp.get("CalculatorValues", "eta"))
-        self.T = np.linspace(start_t, end_t, num=time_steps)
+        self.T = [start_t, time_step]
 
     def leave_sections(self):
         num = len(self.leaves) / float(self.noP)
         num = int(np.floor(num))
         for i in xrange(self.noP-1):
             yield self.leaves[i * num : (1 + i) * num]
-        yield self.leaves[3 * num :]
+        yield self.leaves[-num:]
 
     def spawn_worker(self, leaves):
         q = Queue()

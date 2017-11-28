@@ -9,6 +9,7 @@ def positions(cp):
     seed = cp.get("RandomGenerator", "seed")
     if seed != 'None': np.random.seed(int(seed))
     coord = (np.random.randn(4, N) * sigma) + mu
+    coord[2:] = np.zeros_like(coord[2:])
     for x, y, xvel, yvel in zip(coord[0], coord[1], coord[2], coord[3]):
         yield x, y, xvel, yvel
 

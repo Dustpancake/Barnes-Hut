@@ -65,6 +65,43 @@ class BarnesHut(object):
         self.centre_of_mass()
         self.own_size()
 
+    def clear(self):
+        self.ALLNODES = []
+        self.NODES = []
+        self.LEAVES = []
+
+
+    def _find_allnodes(self, nodes):
+        print nodes
+        for node in nodes:
+            print "YISS",node.NODES, len(node.NODES), node
+            if len(node.NODES) == 0:
+                print "appending", node
+                self.ALLNODES.append(node)
+                continue
+            elif len(node.NODES) > 0:
+                self._find_allnodes(node)
+
+    def find_allnodes(self):
+        all = []
+        if len(self.NODES) == 0: return [self]
+        for node in self.NODES:
+            all += [node]
+            f = node.find_allnodes()
+            all += f
+        return all
+
+
+
+    def all_children(self):
+        all = []
+        if self.children == 0: return [self]
+        for child in self.children:
+            all += [child]
+            f = child.all_children()
+            all += f
+        return all
+
 class Node(BarnesHut):
     def __init__(self, stars, region):
         self.reset()
