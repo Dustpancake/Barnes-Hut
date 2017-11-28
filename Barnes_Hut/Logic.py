@@ -35,6 +35,7 @@ class LogicHandler(Process, object):
         self.QUEUES, self.RECEIVER = self.tree.construct(self.ALL_OBJECTS)
         tree = self.tree.get_all_leaf_positions()
         self.give_tree(tree)
+        time.sleep(2)
         while True:
             time.sleep(2)
             self.listen()

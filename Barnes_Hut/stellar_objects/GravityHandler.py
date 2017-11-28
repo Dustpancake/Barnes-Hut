@@ -15,9 +15,10 @@ class GravityCalc(TreeTrans):
         self.noP = int(cp.get("CalculatorValues", "number of processes"))
         start_t = float(cp.get("CalculatorValues", "start time"))
         time_step = float(cp.get("CalculatorValues", "time step"))
+        time_end = float(cp.get("CalculatorValues", "end time"))
         self.theta = float(cp.get("CalculatorValues", "theta"))
         self.eta = float(cp.get("CalculatorValues", "eta"))
-        self.T = [start_t, time_step]
+        self.T = [start_t, time_step, time_end]
 
     def leave_sections(self):
         num = len(self.leaves) / float(self.noP)

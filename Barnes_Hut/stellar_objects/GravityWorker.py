@@ -18,6 +18,7 @@ class Calculations:
         star.vel += acc * self.t[1]
         star.pos += star.vel * self.t[1]
         self.stars.append(star)
+        self.t[0] += self.t[1]
 
 
 class Worker(Process, TreeTrans, Calculations):
@@ -49,6 +50,8 @@ class Worker(Process, TreeTrans, Calculations):
             self.return_stars()
             #print "took me {}s".format(time.time() -t)
             self.update_tree()
+        while True:
+            time.sleep(10)
 
     def return_stars(self):
         #print "hello", len(self.stars)
