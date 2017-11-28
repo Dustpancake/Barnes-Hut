@@ -46,12 +46,12 @@ class Worker(Process, TreeTrans, Calculations):
             self.clear()
             t = time.time()
             for leaf, job in self.arrange_tree():
-                self.calculate(leaf.STARS[0], job)
+                self.acc = np.array([0, 0])
+                star, acc = self.calculate(leaf.STARS[0], job)
+                self.step(star, acc)
             self.return_stars()
             #print "took me {}s".format(time.time() -t)
             self.update_tree()
-        while True:
-            time.sleep(10)
 
     def return_stars(self):
         #print "hello", len(self.stars)
@@ -72,12 +72,15 @@ class Worker(Process, TreeTrans, Calculations):
 
     def calculate(self, star, job):
         pos1 = star.pos
-        acc = np.zeros_like(pos1)
         num = 0
         for branch in job:
+            if star in branch.STARS:
+                if len(branch.STARS) != 1:
+                    self.calculate(star, branch)
+                continue
             pos2 = branch.COM
             m2 = branch.MASS
-            acc += self.getAcc(pos1, pos2, m2)
+            self.acc += self.getAcc(pos1, pos2, m2)
             num += 1
-        print "Calculation number =", num
-        self.step(star, acc)
+        return star, self.acc
+

@@ -18,6 +18,7 @@ class GravityCalc(TreeTrans):
         time_end = float(cp.get("CalculatorValues", "end time"))
         self.theta = float(cp.get("CalculatorValues", "theta"))
         self.eta = float(cp.get("CalculatorValues", "eta"))
+        self.buffer_size = int(cp.get("StreamValues", "worker buffer size"))
         self.T = [start_t, time_step, time_end]
 
     def leave_sections(self):
@@ -28,7 +29,7 @@ class GravityCalc(TreeTrans):
         yield self.leaves[-num:]
 
     def spawn_worker(self, leaves):
-        q = Queue()
+        q = Queue(maxsize= self.buffer_size)
         w = Worker(q, leaves, self.tree, G=self.G,
                    theta=self.theta, eta=self.eta, t=self.T)
         r = w.get_receiver()

@@ -20,7 +20,6 @@ class TreeTrans():
     TEMP = []
     def descend_node(self, leaf_pos, tree):
         rf = lambda vector: np.sqrt(vector[0]**2 + vector[1]**2)
-        #print type(tree)
         for branch in tree:
             bpos = branch.COM
             vec = np.abs(bpos-leaf_pos)

@@ -1,0 +1,19 @@
+TODO
+
+end time stuff, cus processes aren't terminating correctly
+    i.e. when worker process is idle, data stream to logic halts
+        -check if queue is empty or something
+
+DONE::
+GUI stream needs better way to get tree:
+    at the moment it's just scanning all the way through, maybe
+    preceed the tree items with a length so the GUI knows what it is
+    expecting
+
+DONE::need COM
+display options as listed in the config
+
+DONE::
+workers are still considering their own stars when working out forces
+
+velocity generation

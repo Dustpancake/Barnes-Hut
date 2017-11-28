@@ -1,13 +1,22 @@
 from Tkinter import *
 from ..Support import Config
+import Image, ImageDraw
+import os
+from os.path import isfile, join
 
 class Universe(Frame):
     ITEMS = []
     TREE = []
+    white = (255, 255, 255)
+    green = (102, 255, 102)
+    black = (0,0,0)
+    path = "./frames/"
     def __init__(self, master=None):
-        self.cp = Config()
-        self.__dict__ = dict(self.__dict__, **self.cp.make_dict("FrameConfig"))
-
+        cp = Config()
+        self.__dict__ = dict(self.__dict__, **cp.make_dict("FrameConfig"))
+        self.save_frames = int(cp.get("DisplayConfig", "save frames"))
+        self.clean_up()
+        self.PIL_image()
         Frame.__init__(self, master)
         self.pack()
         self.create_canvas()
@@ -16,14 +25,36 @@ class Universe(Frame):
         self.canv = Canvas(self, width=self.size, height=self.size, bg = self.colour)
         self.canv.pack()
 
+    def PIL_image(self):
+        self.img = Image.new("RGB", (int(self.size), int(self.size)), self.black)
+        self.draw = ImageDraw.Draw(self.img)
+
+    i = 0
+    def save_image(self):
+        self.canv.create_text((50, 15), text="Frame:" + str(self.i), fill='white')
+        self.img.save(self.path + str(self.i) + ".jpg")
+        self.PIL_image()
+        self.i += 1
+
     def add_star(self, star):
         pos = star.pos
         x, y = pos[0], pos[1]
         dim = star.size/2.
         star = self.canv.create_oval(x-dim, y-dim, x+dim, y+dim, fill = star.colour)
+        self.draw.ellipse((x-dim, y-dim, x+dim, y+dim), fill=self.white)
         self.ITEMS.append(star)
 
     def add_box(self, descr):
         x, y, x2, y2 = descr
         box = self.canv.create_rectangle(x, y, x2, y2, outline='green')
         self.TREE.append(box)
+
+    def clean_up(self):
+        files = self.get_filenames()
+        for i in files:
+            os.remove(i)
+
+    def get_filenames(self):
+        files = [f for f in os.listdir(self.path) if isfile(join(self.path, f))]
+        path_files = [self.path + f for f in files]
+        return path_files[:]
