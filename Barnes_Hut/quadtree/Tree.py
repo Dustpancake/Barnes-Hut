@@ -29,7 +29,7 @@ class QuadTree(BarnesHut):
         for node in self.ALLNODES:
             if len(node.STARS) == self.maximum:
                 self.LEAVES.append(node)
-        print "Leaves:", len(self.LEAVES)
+        #print "Leaves:", len(self.LEAVES)
 
     def construct(self, objects):
         self.build(objects, clr=False)
@@ -44,10 +44,10 @@ class QuadTree(BarnesHut):
         self.describe_self()
         self.new_depth()
         if clr: self.ALLNODES = np.array(self.find_allnodes())
-        print "THIS IS IMPORTANT:", len(np.unique(self.ALLNODES))
+        #print "THIS IS IMPORTANT:", len(np.unique(self.ALLNODES))
         self.find_leaf()
-        print "Tree building took {}s".format(time.time() - t)
-        print "Tree length is", len(self.ALLNODES)
+        #print "Tree building took {}s".format(time.time() - t)
+        #print "Tree length is", len(self.ALLNODES)
         print "Tree bytes is", sys.getsizeof(self.ALLNODES)
 
     def get_all_nodes(self):

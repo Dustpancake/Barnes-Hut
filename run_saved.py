@@ -34,7 +34,7 @@ class Display(Frame):
         if self.i == len(self.images): self.i=0
         self.show(self.images[self.i])
         self.i += 1
-        self.after(100, self.update)
+        self.after(50, self.update)
 
     path = "./frames/"
     def get_filenames(self):

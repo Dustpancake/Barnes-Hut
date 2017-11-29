@@ -12,7 +12,6 @@ class LogicHandler(Process, object):
         self.tree = QuadTree()
         self.star_stream = Queue(maxsize=self.star_buffer_size)
         self.tree_stream = Queue(maxsize=self.tree_buffer_size)
-        print "HELLLO2"
         self.initial_stars()
 
     def get_config(self):
@@ -59,14 +58,15 @@ class LogicHandler(Process, object):
             self.listen()
             self.update()
             self.send_back()
+            print "Added stars to queue"
 
     def listen(self):
         temp = []
-        print "listening"
+        #print "listening"
         for queue in self.QUEUES:
             stars = self.get_value(queue)
             temp += stars
-        print "Temp length", len(temp)
+        #print "Temp length", len(temp)
         self.ALL_OBJECTS = temp
 
     def update(self):

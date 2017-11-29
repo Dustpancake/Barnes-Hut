@@ -14,6 +14,7 @@ class Universe(Frame):
     def __init__(self, master=None):
         cp = Config()
         self.__dict__ = dict(self.__dict__, **cp.make_dict("FrameConfig"))
+        self.show = cp.get("DisplayConfig", "show display")
         self.save_frames = int(cp.get("DisplayConfig", "save frames"))
         self.clean_up()
         self.PIL_image()
@@ -35,19 +36,22 @@ class Universe(Frame):
         self.img.save(self.path + str(self.i) + ".jpg")
         self.PIL_image()
         self.i += 1
+        print "Saved frame {}.jpg".format(self.i)
 
     def add_star(self, star):
         pos = star.pos
         x, y = pos[0], pos[1]
         dim = star.size/2.
-        star = self.canv.create_oval(x-dim, y-dim, x+dim, y+dim, fill = star.colour)
+        if self.show == 1:
+            star = self.canv.create_oval(x-dim, y-dim, x+dim, y+dim, fill = star.colour)
+            self.ITEMS.append(star)
         self.draw.ellipse((x-dim, y-dim, x+dim, y+dim), fill=self.white)
-        self.ITEMS.append(star)
 
     def add_box(self, descr):
         x, y, x2, y2 = descr
-        box = self.canv.create_rectangle(x, y, x2, y2, outline='green')
-        self.TREE.append(box)
+        if self.show == 1:
+            box = self.canv.create_rectangle(x, y, x2, y2, outline='green')
+            self.TREE.append(box)
 
     def clean_up(self):
         files = self.get_filenames()
