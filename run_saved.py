@@ -15,6 +15,7 @@ class Display(Frame):
     images = {}
     def cache_all(self):
         for im in self.get_filenames():
+            if 'DS' in im: continue
             i = self.get_img_num(im)
             _image = Image.open(im)
             tk_image = ImageTk.PhotoImage(_image)
@@ -41,6 +42,7 @@ class Display(Frame):
         files = [f for f in os.listdir(self.path) if isfile(join(self.path, f))]
         path_files = [self.path + f for f in files]
         print "Got {} frames".format(len(path_files))
+        print path_files
         return path_files[:]
 
 if __name__ == '__main__':

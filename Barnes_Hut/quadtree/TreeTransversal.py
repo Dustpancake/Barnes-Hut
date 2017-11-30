@@ -15,7 +15,7 @@ class TreeTrans():
         for leaf in self.leaves:
             self.TEMP = []
             descent(leaf.STARS[0].pos, self.tree)
-            yield leaf, self.TEMP
+            yield leaf, self.TEMP[:]
 
     TEMP = []
     def descend_node(self, leaf_pos, tree):
@@ -25,7 +25,7 @@ class TreeTrans():
             vec = np.abs(bpos-leaf_pos)
             d = rf(vec)
             s = np.mean(branch.REGION)
-            if s / d < self.theta or len(branch.NODES) == 1:
+            if s / float(d) < self.theta or len(branch.NODES) == 0:
                 self.TEMP.append(branch)
             else:
                 self.descend_node(leaf_pos, branch)

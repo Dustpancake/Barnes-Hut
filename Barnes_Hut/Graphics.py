@@ -69,7 +69,7 @@ class Graphics(Frame):
         if self.show_stars == 1: self.add_stars()
         if self.show_tree == 1: self.add_tree()
         if self.save_frames == 1: self.uni.save_image()
-        self.after(1000, self.update_frame)
+        self.after(10, self.update_frame)
 
     def close(self):
         while True:

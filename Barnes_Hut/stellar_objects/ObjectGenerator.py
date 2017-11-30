@@ -1,6 +1,6 @@
-from Star import Star
 import numpy as np
 from ..Support import Config
+from Template import *
 import time
 
 class ObjectGenerator():
@@ -93,13 +93,24 @@ class ObjectGenerator():
 
     stars = []
     def make_stars(self):
+        if self.method == 'galaxy':
+            a = self.create_galaxy()
+            time.sleep(1000)                #TODO
+            return a
+        return self.star_distribution()
+
+    def create_galaxy(self):
+        gal = Galaxy()
+
+
+    def star_distribution(self):
         cp = Config()
         stars = self.stars
         for x, y in self.positions():
             values = {
-                'pos' : np.array([x, y]),
-                'vel' : np.array([0, 0]),
-                'star' : 0
+                'pos': np.array([x, y]),
+                'vel': np.array([0, 0]),
+                'star': 0
             }
             values = dict(values, **cp.make_dict("StarProperties"))
             s = Star(values)

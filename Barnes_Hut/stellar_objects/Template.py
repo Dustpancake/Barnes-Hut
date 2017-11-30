@@ -1,9 +1,16 @@
-class Stellar(object):
-    def get_pos(self):
-        return self.pos
+from Star import *
+from ..Support import Config
 
-    def get_vel(self):
-        return self.vel
+class Galaxy():
+    def __init__(self):
+        self.get_config()
+        self.make_center()
 
-    def __add__(self, b):
-        return self.mass + b.mass
+    def get_config(self):
+        cp = Config()
+        self.star_prop = cp.make_dict("StarProperties")
+        self.bh_scale = cp.get("GalaxyProperties", "black hole scale")
+
+    def make_center(self):
+
+        self.root = BlackHole()
