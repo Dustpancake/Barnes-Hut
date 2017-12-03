@@ -9,6 +9,4 @@ The Barnes-Hut algorithm is an approximation for an N-Body problem, commonly use
 For more detail, see [here](http://arborjs.org/docs/barnes-hut).
 
 ----
-![alt text](https://github.com/Moontemple/Barnes-Hut/blob/master/header.png "1000 Bodies")
-
-<img src="https://github.com/Moontemple/Barnes-Hut/blob/master/header.png" align="left" height="128" width="128" >
+<img src="https://github.com/Moontemple/Barnes-Hut/blob/master/header.png" align="left" height="400" width="400" >
