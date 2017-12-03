@@ -1,6 +1,6 @@
 # Barnes-Hut Python Simulations
 
-Created by F Baker Nov/Dec 2017 for PH2140 at Royal Holloway
+Created by F Baker Nov/Dec 2017 for PH2140 at Royal Holloway \n
 Currently still in Alpha
 
 ----
