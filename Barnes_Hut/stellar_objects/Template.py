@@ -50,9 +50,3 @@ class Galaxy(Velocitiy):
 
     def gen_pos(self):
         return (np.random.randn(1, 2) * self.sigma) + self.mu
-
-    def getAcc(self, p1, p2, m2):
-        d = p2 - p1
-        r = np.sqrt(d.dot(d)) + self.eta
-        f = np.array(d * self.G * m2 / r ** 3)
-        return f
