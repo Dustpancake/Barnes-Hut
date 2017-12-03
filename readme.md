@@ -11,5 +11,4 @@ For more detail, see [here](http://arborjs.org/docs/barnes-hut).
 ----
 ![alt text](https://github.com/Moontemple/Barnes-Hut/blob/master/header.png "1000 Bodies")
 
-
-<a href="url"><img src="https://github.com/Moontemple/Barnes-Hut/blob/master/header.png" align="left" height="48" width="48" ></a>
+<img src="https://github.com/Moontemple/Barnes-Hut/blob/master/header.png" align="left" height="128" width="128" >
