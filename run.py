@@ -23,6 +23,6 @@ root.protocol("WM_DELETE_WINDOW", on_close)
 
 root.mainloop()
 
-sleep(60)
+sleep(3)
 window.close()
 
