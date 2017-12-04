@@ -2,6 +2,9 @@ from Tkinter import Tk
 import Barnes_Hut.Graphics as grph
 from time import time, sleep
 
+with open("title.txt", 'r') as file:
+    print file.read()
+
 def on_close():
     window.close()
     root.destroy()
@@ -26,3 +29,5 @@ root.mainloop()
 sleep(3)
 window.close()
 
+
+from matplotlib.pyplot import quiver

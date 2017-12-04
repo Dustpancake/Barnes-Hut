@@ -37,12 +37,12 @@ class ObjectGenerator():
     def make_stars(self):
         if self.method == 'galaxy':
             a = self.create_galaxy()
-            time.sleep(1000)                #TODO
             return a
         return self.star_distribution()
 
     def create_galaxy(self):
         gal = Galaxy()
+        return gal.get_objects()
 
     def star_distribution(self):
         cp = Config()

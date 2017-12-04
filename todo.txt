@@ -17,3 +17,7 @@ DONE::
 workers are still considering their own stars when working out forces
 
 velocity generation
+
+all of control interface
+
+terminate processes correctly

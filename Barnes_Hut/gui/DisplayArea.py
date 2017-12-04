@@ -7,12 +7,10 @@ from os.path import isfile, join
 class Universe(Frame):
     ITEMS = []
     TREE = []
-    white = (255, 255, 255)
-    green = (102, 255, 102)
-    black = (0,0,0)
     path = "./frames/"
     def __init__(self, master=None):
         cp = Config()
+        self.RGB_colours()
         self.__dict__ = dict(self.__dict__, **cp.make_dict("FrameConfig"))
         self.show = cp.get("DisplayConfig", "show display")
         self.save_frames = int(cp.get("DisplayConfig", "save frames"))
@@ -42,10 +40,12 @@ class Universe(Frame):
         pos = star.pos
         x, y = pos[0], pos[1]
         dim = star.size/2.
+        colour = star.colour
         if self.show == 1:
-            star = self.canv.create_oval(x-dim, y-dim, x+dim, y+dim, fill = star.colour)
+            s_dim = dim + 1
+            star = self.canv.create_oval(x-s_dim, y-s_dim, x+s_dim, y+s_dim, fill = colour)
             self.ITEMS.append(star)
-        self.draw.ellipse((x-dim, y-dim, x+dim, y+dim), fill=self.white)
+        self.draw.ellipse((x-dim, y-dim, x+dim, y+dim), fill=self.__dict__[colour])
 
     def add_box(self, descr):
         x, y, x2, y2 = descr
@@ -62,3 +62,10 @@ class Universe(Frame):
         files = [f for f in os.listdir(self.path) if isfile(join(self.path, f))]
         path_files = [self.path + f for f in files]
         return path_files[:]
+
+    def RGB_colours(self):
+        self.white = (255, 255, 255)
+        self.green = (102, 255, 102)
+        self.red = (255, 0, 0)
+        self.black = (0, 0, 0)
+        self.grey = (192, 192, 192)
