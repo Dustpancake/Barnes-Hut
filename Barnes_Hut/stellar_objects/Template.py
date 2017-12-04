@@ -29,7 +29,8 @@ class Galaxy(Velocitiy):
         self.mu = float(cp.get("RandomGenerator", "pos mu"))
         self.pre_factor = float(cp.get("GalaxyProperties", "velocity factor"))
         self.v_method = cp.get("GalaxyProperties", "velocity method")
-        self.root_mass = 100*self.star_mass
+        bh_mfact = float(cp.get("GalaxyProperties", "black hole mass factor"))
+        self.root_mass = bh_mfact*self.star_mass
         self.root_pos = np.array([self.mu, self.mu], dtype=float)
 
     def make_center(self):
@@ -39,7 +40,6 @@ class Galaxy(Velocitiy):
                   'pos' : self.root_pos.copy(),
                   'vel' : np.array([0, 0]),
                   "black_hole" : 0}
-        print "VALUES", values
         self.root = BlackHole(values)
         self.MASS += self.root.mass
         self.ALL_OBJECTS.append(self.root)

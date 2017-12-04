@@ -12,11 +12,11 @@ class ObjectGenerator():
         self.N = int(cp.get("GeneralValues", "number of objects"))
         self.sigma = cp.get("RandomGenerator", "pos sigma")
         self.mu = cp.get("RandomGenerator", "pos mu")
-        self.seed = cp.get("RandomGenerator", "seed")
+        seed = cp.get("RandomGenerator", "seed")
+        if seed != 'None': np.random.seed(int(seed))
         self.method = cp.get("RandomGenerator", "method")
 
     def positions(self):
-        if self.seed != 'None': np.random.seed(int(self.seed))
         coord = self.randompos()
         for x, y in zip(coord[0], coord[1]):
             yield x, y

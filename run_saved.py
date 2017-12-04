@@ -37,7 +37,7 @@ class Display(Frame):
         self.i += 1
         self.after(50, self.update)
 
-    path = "./frames/"
+    path = "./frames/11/"
     def get_filenames(self):
         files = [f for f in os.listdir(self.path) if isfile(join(self.path, f))]
         path_files = [self.path + f for f in files]
