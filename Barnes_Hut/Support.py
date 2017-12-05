@@ -4,6 +4,7 @@ from ConfigParser import ConfigParser
 class Config(ConfigParser, object):
     def __init__(self):
         PATH = "./Barnes_Hut/config_files/config1.ini"
+        self.path = PATH
         open(PATH)
         ConfigParser.__init__(self)
         self.read(PATH)
