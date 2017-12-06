@@ -47,7 +47,7 @@ class FileAccess(object):
         cp = Config()
         path = cp.path
         with open(path, 'r') as config_file:
-            with open(self.path+"config"+str(num)+"file.ini", 'w') as save:
+            with open("./Barnes_Hut/config_files/config"+str(num)+"file.ini", 'w') as save:
                 save.write(config_file.read())
 
     def make_new_dir(self, num):

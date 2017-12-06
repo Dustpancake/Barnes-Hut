@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 
 
 _BG_COLOUR = '#%02x%02x%02x' % (20, 20, 20)
+_SAVE_PATH = "./Barnes_Hut/config_files/latest.ini"
 
 class WeclomeRight(Frame):
     def __init__(self, master=None):
@@ -14,7 +15,7 @@ class WelcomeLeft(Frame):
         self.current_file = None
         self.c_on = False
         self.canv = canvas
-        OPTIONS = [("Run", 0),
+        OPTIONS = [("Run", self.start),
                    ("Open Config", self.display_config),
                    ("Load Config", self.load_config_file),
                    ("About", 0),]
@@ -32,35 +33,53 @@ class WelcomeLeft(Frame):
         b1 = Button(self, text=key, command=value, width=7, bg=_BG_COLOUR, highlightbackground=_BG_COLOUR)
         b1.pack(pady = 200)
         self.buttons.append(b1)
+        self.init_build()
+
+    def init_build(self):
+        self._config = ConfigModule(self.canv, path=self.current_file, instance=self)
+        self.ca_config = self.canv.create_window((50, 50), window=self._config, anchor=NW, state=HIDDEN)
 
     def load_config_file(self):
         top = Toplevel(self)
         top.resizable(False, False)
-        l = ConfigLoadWindow(top, self._current_file)
+        l = ConfigLoadWindow(top, self.feedback)
         l.focus_set()
         l.grab_set()
         self.wait_window(l)
         l.grab_release()
 
-    def _current_file(self, config_file):
-        print config_file, "got"
-        if '.ini' in config_file:
-            print "saved"
-            self.current_file = config_file
-            if self.c_on:
-                self.display_config()
-                self.display_config()
+    def feedback(self, path):
+        self.current_file = path
+        self.canv.delete(self.ca_config)
+        self.init_build()
+        if self.c_on == True:
+            self.c_on = False
+        self.value_check()
+        self.display_config()
+
+    #TODO
+    def start(self):
+        if self.value_check():
+            self.build_config_file()
+
+    def value_check(self):
+        d = self._config.get_storage()
+        cv = CheckValues()
+        return cv.check_input(d)
+
+    def build_config_file(self):
+        if self.current_file != None:
+            ConfigBuilder(_SAVE_PATH, self._config.get_storage(), template_path=self.current_file)
+        else:
+            ConfigBuilder(_SAVE_PATH, self._config.get_storage())
 
     def display_config(self):
         if not self.c_on:
-            self._config = TemplateConfig(self.canv, path=self.current_file)
-            self.canv.create_window((50, 50), window = self._config, anchor=NW)
+            self.canv.itemconfig(self.ca_config, state=NORMAL)
             self.buttons[1].config(text="Close Config")
             self.c_on = True
         else:
-            try:
-                self._config.destroy()
-            except: pass
+            self.canv.itemconfig(self.ca_config, state=HIDDEN)
             self.buttons[1].config(text="Open Config")
             self.c_on = False
 
