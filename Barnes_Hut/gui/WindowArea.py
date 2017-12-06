@@ -12,6 +12,7 @@ class WeclomeRight(Frame):
 
 class WelcomeLeft(Frame):
     def __init__(self, master=None, canvas = None):
+        self.mstr=master
         self.current_file = None
         self.c_on = False
         self.canv = canvas
@@ -61,6 +62,8 @@ class WelcomeLeft(Frame):
     def start(self):
         if self.value_check():
             self.build_config_file()
+            self.mstr.start()
+
 
     def value_check(self):
         d = self._config.get_storage()
@@ -89,6 +92,7 @@ class WelcomeLeft(Frame):
 class MainWindow(Frame):
     grey = '#%02x%02x%02x' % (64, 64, 64)
     def __init__(self, master=None):
+        self.mstr = master
         Frame.__init__(self, master, bg=_BG_COLOUR)
         self.grid()
         self.canv = Canvas(self, height = 600, width = 600, bg = _BG_COLOUR, highlightbackground='white', relief=SUNKEN, highlightthickness=0)
@@ -111,4 +115,7 @@ class MainWindow(Frame):
         self.tk_image = ImageTk.PhotoImage(_image)
         self.canv.create_image(0,0, image = self.tk_image, anchor=NW)
         return self.canv
+
+    def start(self):
+        self.mstr.start_simulation()
 
