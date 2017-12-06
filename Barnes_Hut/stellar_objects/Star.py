@@ -9,7 +9,7 @@ class Stellar(object):
         return self.mass + b.mass
 
 class Star(Stellar):
-    __slots__ = ['mass', 'pos', 'vel' 'star', 'size', 'colour']
+    __slots__ = ['mass', 'pos', 'vel' 'type', 'size', 'colour']
     def __init__(self, values):
         self.__dict__ = dict(self.__dict__, **values)
 
@@ -23,5 +23,5 @@ class Star(Stellar):
         self.__dict__ = state[0]
 
 class BlackHole(Star):
-    __slots__ = ['mass', 'pos', 'vel' 'black_hole', 'size', 'colour']
+    __slots__ = ['mass', 'pos', 'vel' 'type', 'size', 'colour']
     pass

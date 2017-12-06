@@ -36,12 +36,19 @@ class ObjectGenerator():
     stars = []
     def make_stars(self):
         if self.method == 'galaxy':
-            a = self.create_galaxy()
-            return a
+            if self.N <=1: return self.create_galaxy()
+            print "mulitple galaxies"
+            Config.check_galaxies(self.N)
+            ret = []
+            for i in xrange(self.N):
+                a = self.create_galaxy(i)
+                ret += a[:]
+            return ret
+
         return self.star_distribution()
 
-    def create_galaxy(self):
-        gal = Galaxy()
+    def create_galaxy(self, i=0):
+        gal = Galaxy(i)
         return gal.get_objects()
 
     def star_distribution(self):
@@ -51,7 +58,7 @@ class ObjectGenerator():
             values = {
                 'pos': np.array([x, y]),
                 'vel': np.array([0, 0]),
-                'star': 0
+                'type' : 0
             }
             values = dict(values, **cp.make_dict("StarProperties"))
             s = Star(values)

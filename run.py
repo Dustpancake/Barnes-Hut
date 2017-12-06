@@ -1,6 +1,8 @@
 from Tkinter import Tk
 import Barnes_Hut.Graphics as grph
 from time import time, sleep
+import warnings
+warnings.filterwarnings("ignore")
 
 with open("title.txt", 'r') as file:
     print file.read()

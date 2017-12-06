@@ -1,9 +1,10 @@
 from ConfigParser import ConfigParser
 
+class MissingConfig(Exception):
+    pass
 
 class Config(ConfigParser, object):
-    def __init__(self):
-        PATH = "./Barnes_Hut/config_files/config1.ini"
+    def __init__(self, PATH = "./Barnes_Hut/config_files/config.ini"):
         self.path = PATH
         open(PATH)
         ConfigParser.__init__(self)
@@ -23,3 +24,13 @@ class Config(ConfigParser, object):
         except:
             pass
         return val
+
+    @staticmethod
+    def check_galaxies(n):
+        cp = Config()
+        for i in xrange(n):
+            try:
+                cp.options("GalaxyProperties"+str(i))
+            except:
+                print "Could not find config for galaxy {} - please create property".format(i)
+                raise MissingConfig
