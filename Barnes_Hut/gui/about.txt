@@ -1,0 +1,20 @@
+Barnes-Hut Simulation version beta 1.1
+
+This GUI behaves as a config file editor and a frame visualiser.
+For real time simulations, please run "RunSimulation.py". The simulator uses the most recent save of the config file, which is created by clicking run to open my annoying dialog box.
+
+For full understanding of the behaviour, and explanation of some of the variable types, please read the report.
+
+For the advanced config there are a few clarifications not yet implemented:
+    - Size of Galaxy is the number of stars in the Galaxy
+    - Buffer Sizes are the maximum sizes of the data queues
+    - Fixed Size in the Quad Tree refers to scaling of the tree around the space with stars, or all space. It doesn't make much of a performance difference but it's all about the aesthetic sometimes.
+
+This program still has quite a few unfinished features:
+    - needs condition control on user input
+    - gravity config is rudimentary
+    - Tkinter denied embedding real-time simulator
+
+as well as fully fledged doc-strings. Unfortunately I did not have time for these within the 3 weeks assessment period, but have every intention of including them later on (bar the doc-strings).
+
+If you want to understand the code better, the report is a good place to start.

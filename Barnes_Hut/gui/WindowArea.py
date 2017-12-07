@@ -2,6 +2,7 @@ from ConfigInput import *
 from PIL import Image, ImageTk
 from RunCached import Display
 from AboutWindow import AboutFrame
+import os
 
 _BG_COLOUR = '#%02x%02x%02x' % (20, 20, 20)
 _SAVE_PATH = "./Barnes_Hut/config_files/latest.ini"
@@ -177,6 +178,13 @@ class WelcomeLeft(Frame):
         """
         exit(0)
 
+from multiprocessing import Process
+class Runner(Process):
+    def __init__(self):
+        Process.__init__(self)
+    def run(self):
+        os.system("python ./RunSimulation.py")
+
 class InfoWindow(Frame):
     """
     Info Window Class
@@ -195,8 +203,9 @@ class InfoWindow(Frame):
         self.grid()
         with open("./Barnes_Hut/log.txt") as f:
             text = f.read()
-        Label(self, text=text).grid()
-        Button(self, text="OK", command = lambda : parent.destroy()).grid()
+        Label(self, text=text).grid(columnspan=2)
+        Button(self, text="Start Here (buggy)", command= lambda :Runner().start()).grid(row=1, column=0)
+        Button(self, text="OK", command = lambda : parent.destroy()).grid(row = 1, column = 1)
 
 class MainWindow(Frame):
     """
@@ -236,6 +245,9 @@ class MainWindow(Frame):
 
     impath = "./header.png"
     def header_image(self):
+        """
+        Creates header image on Tkinter canvas
+        """
         _image = Image.open(self.impath)
         _image = _image.resize((700, 700), Image.ANTIALIAS)     #TODO YOU JUST CHANGED THIS
         self.tk_image = ImageTk.PhotoImage(_image)
@@ -243,9 +255,18 @@ class MainWindow(Frame):
         return self.canv
 
     def start(self):
+        """
+        Called when "Run" button is clicked
+        Call winfo_box
+        """
+
         self.winfo_box()
 
     def winfo_box(self):
+        """
+        Creates instance of the InfoWindow class
+        Displays the Frame in a TopLevel and disables own Frame until TopLevel is closed
+        """
         top = Toplevel(self)
         top.resizable(False, False)
         l = InfoWindow(top)

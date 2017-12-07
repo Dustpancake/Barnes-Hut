@@ -5,6 +5,10 @@ from Support import Config
 import time
 
 class LogicHandler(Process, object):
+    """
+    Logic Process Class
+    Inherits from Process and object
+    """
     STAR_WIDGETS = []
     def __init__(self):
         Process.__init__(self)

@@ -16,3 +16,6 @@ knowledge of Tkinter, albeit little, did not suffice.
 
 If I ever find a suitable fix I am satisfied with I will update this project to my github repository:
 http://github.com/moontemple/Barnes-Hut/
+
+In the last minute I added a function I came up with that might work. I relied on subprocess.Popen() in the past, but
+this new solution works using mulitprocessing.Process() and os.system() calls, and hopefully should work on Windows aswell.

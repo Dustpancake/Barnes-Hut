@@ -11,10 +11,16 @@ class Calculations:
         f = np.array(d * self.G * m2 / r ** 3)
         return f
 
-    #euler-cromer
     def step(self, star, acc):
-        #print acc, "THIS IS ACC"
-        #print star.vel, "THIS IS VEL"
+        """
+        Calculate velocity and position of next time step
+
+        :param star:
+        Star type object
+
+        :param acc:
+        Acceleration vector
+        """
         star.vel += acc * self.t[1]
         star.pos += star.vel * self.t[1]
         self.stars.append(star)
@@ -54,7 +60,6 @@ class Worker(Process, TreeTrans, Calculations):
             self.update_tree()
 
     def return_stars(self):
-        #print "hello", len(self.stars)
         self.queue.put(self.stars)
 
     def clear(self):

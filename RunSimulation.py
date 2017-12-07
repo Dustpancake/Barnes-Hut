@@ -5,6 +5,19 @@ import warnings
 warnings.filterwarnings("ignore")
 
 def run(frame):
+    """
+    Run Function
+    Logs title text and times
+    Creates instance of Graphics
+        calls add_stars of Graphics
+        calls add_tree of Graphics
+
+    :param frame:
+    Tkinter frame to draw simulation on
+
+    :return:
+    Instance of Graphics from Barnes_Hut.Graphics
+    """
     with open("title.txt", 'r') as file:
         print file.read()
 
@@ -25,7 +38,7 @@ def run(frame):
 
 if __name__ == '__main__':
     def on_close():
-        window.close()
+        window.close()      #close window properly
         root.destroy()
 
     root = Tk()
