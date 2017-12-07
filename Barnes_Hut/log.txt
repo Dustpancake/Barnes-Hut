@@ -1,0 +1,18 @@
+... unfortunately that is all this GUI can do. In order to start the simulation based off of the
+config file you just created, you'll have to run
+
+    RunSimulation.py
+
+This is a limitation of the Tkinter library - it only supports graphical loops in the main thread and/or process.
+
+I tried numerous work-arounds over the course of many hours, using novel subprocess() calls with localhost
+sockets, aswell as attempts at rewritting core Tkinter classes but nothing ultimately worked, except for directly
+passing commands to the command line, but my code quickly became something that was only runnable on Unix machines.
+In the interest of versatility therefore, I have made this info box.
+By the time I got round to programming the GUI my simulation had a very long series of nested process
+calls which, although could be displayed in the same window, was very unresponsive (as such a simulation should be!).
+I wanted to display the simulation in a new window (not a TopLevel, as those make the parent loop pause), but my current
+knowledge of Tkinter, albeit little, did not suffice.
+
+If I ever find a suitable fix I am satisfied with I will update this project to my github repository:
+http://github.com/moontemple/Barnes-Hut/

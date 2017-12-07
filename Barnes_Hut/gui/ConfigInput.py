@@ -27,8 +27,9 @@ class ConfigLoadWindow(Frame, FileAccess):
 
     def done(self):
         c_file = self.op_var.get()
-        self.f(c_file)
-        self.mstr.destroy()
+        if c_file != "":
+            self.f(c_file)
+            self.mstr.destroy()
 
     def make_optionmenu(self):
         try:
@@ -123,7 +124,7 @@ class TemplateConfig(Frame, ConfigHandler, _ConfigWidgetMethods):
             Label(subframe, text=self.path, font=self.font, bg=self.colour, highlightbackground=self.colour).grid(row=0, column=0)
             Button(subframe, text='New', font=self.font, bg=self.colour, highlightbackground=self.colour, command = self.make_new).grid(row=0, column=1)
             Button(subframe, text='Save', font=self.font, bg=self.colour, highlightbackground=self.colour,
-                   command=self._save).grid(row=0, column=2)
+                   command=self._save, state=DISABLED).grid(row=0, column=2)
             self._subframe = subframe
         self.grid(padx=(5, 5), pady=(5,5))
         self.frame_config()
@@ -215,6 +216,8 @@ class AdvancedConfig(Frame, _ConfigWidgetMethods, ConfigBuilder):
                 "normal" : "normal"}
     def __init__(self, master=None, feedback = None, path = "./Barnes_Hut/gui/_config_template.ini"):
         self.f = feedback
+        print "path", path
+        self._path = path
         self._mstr = master
         Frame.__init__(self, master=master, bg=self.colour)
         self.grid()
@@ -222,11 +225,11 @@ class AdvancedConfig(Frame, _ConfigWidgetMethods, ConfigBuilder):
         self._ROW2 = 0
         self.COL=0
         self.font = tkFont.Font(family="Courier", size=15, weight='normal')
-        print "Has path", path
         self.keys = Template_Loader(path).get_keys()
         self.make_sections()
         self.storage = self.make_storage()
-        Button(self, text="Done", command=self._done, font= self.font, bg = self.colour, highlightbackground=self.colour).grid(row=self.ROW2, columnspan=2, sticky=E, column=2)
+        Button(self, text="Done", command=self._done, font= self.font, bg = self.colour, highlightbackground=self.colour).grid(row=self.ROW2+2, columnspan=2, sticky=E, column=2)
+        self._galaxyrow = self.ROW2-1
 
     def label_entry(self, sections, inits, col = 0):
         f = super(AdvancedConfig, self).label_entry
@@ -242,7 +245,6 @@ class AdvancedConfig(Frame, _ConfigWidgetMethods, ConfigBuilder):
         for section, keys in self.keys.iteritems():
             if "GalaxyProp" in section: continue
             getattr(self, section)(section, keys)
-        self.GalaxyProperties("GalaxyProperties", self.keys["GalaxyProperties0"])
 
     def FrameConfig(self, name, vals):        #wrote this before I implemented 'storage' objects
         self.sectionLabel(name)
@@ -286,6 +288,7 @@ class AdvancedConfig(Frame, _ConfigWidgetMethods, ConfigBuilder):
         row = self.ROW2
         s = StringVar()
         s.set(vals["method"])
+        s.trace('w', self.new_dialog)
         om = OptionMenu(self, s, *self._methods)
         om.config(width=15, font=self.font, bg=self.colour)
         om.grid(row=row, column=3)
@@ -321,9 +324,86 @@ class AdvancedConfig(Frame, _ConfigWidgetMethods, ConfigBuilder):
         self.sectionLabel(name)
         self._tree_var = self.label_entry(vals.keys(), vals.values())
 
-    def GalaxyProperties(self, name, vals):
-        print name, vals
-        pass
+    def _galclose(self, top):
+        if self.value_check():
+            top.destroy()
+
+    def GalaxyProperties(self):
+        top = Toplevel(self)
+        top.resizable(False, False)
+        l = Frame(top)
+        l.grid()
+        Button(l, text="Close", command=lambda: self._galclose(top)).grid(columnspan=3)
+        self._srow=1
+        self.t_diags = []
+        for i in xrange(int(self._general_var["number of objects"].get())):
+            Label(l, text="GalaxyProperties"+str(i)).grid(row=self.galROW, columnspan=3)
+            self.galaxy_sections(l, i)
+        l.focus_set()
+        l.grab_set()
+        self.wait_window(l)
+        l.grab_release()
+        self.value_check()
+
+    def galaxy_sections(self, parent, i):        #TODO
+        row = self.galROW
+        a = Text(parent, height=7, width=60, wrap=WORD)
+        text = self.get_gal(i)
+        scrollbar = Scrollbar(parent)
+        scrollbar.config(command=a.yview)
+        scrollbar.grid(row=row, column=2)
+        a.config(yscrollcommand=scrollbar.set)
+        a.insert(END, text)
+        a.grid(row=row, column=0, columnspan=2)
+        self.t_diags.append(a)
+
+    def get_gal(self, i):
+        if self._path == None or "template" in self._path: self._path = "./Barnes_Hut/config_files/latest.ini"
+        with open(self._path, 'r') as file:
+            text = file.read()
+        text = text.split("\n")
+        while True:
+            try:
+                i = text.index("[GalaxyProperties"+str(i)+"]")
+            except:
+                pass#self.append_new_galaxy(i)
+            else:
+                break
+        text = text[i+1:i+9]
+        text="\n".join(text)
+        return text
+
+    @property
+    def galROW(self):
+        self._srow+=1
+        return self._srow
+
+    def append_new_galaxy(self, i):
+        print "appending new"
+        text = "\n[GalaxyProperties"+str(i)+"]\nlocation = 500, 410\nvelocity = 0, 0\nsize = 99\nblack hole mass factor = 10000\nblack hole colour = grey\nblack hole scale = 5\nvelocity factor = 0.5\nvelocity method = none"
+        with open(self._path, 'a') as file:
+            file.write(text)
+
+    def append_galaxy(self):
+        with open(self._path, 'r') as file:
+            text = file.read()
+
+
+
+    def new_dialog(self, *event):
+        if self._random_var['method'].get() == 'galaxy':
+            self._general_var["number of objects"].set(1)
+            self.b1 = Button(self, text="Galaxy Config", command = self.GalaxyProperties, font=self.font, bg=self.colour, highlightbackground=self.colour)
+            self.b1.grid(row = self._galaxyrow, column = 2, columnspan =2, sticky=E)
+            self.l1 = Label(self, text="NOTE: number of objects is now number of galaxies", font= self.font, bg = self.colour, highlightbackground=self.colour)
+            self.l1.grid(row = self._galaxyrow+1, column=2, columnspan=2)
+        else:
+            try:
+                self.b1.destroy()
+                self.l1.destroy()
+            except:
+                pass
+            self._general_var["number of objects"].set(1000)
 
     def _done(self):  #TODO
         if self.value_check():

@@ -4,7 +4,7 @@ class MissingConfig(Exception):
     pass
 
 class Config(ConfigParser, object):
-    def __init__(self, PATH = "./Barnes_Hut/config_files/config.ini"):
+    def __init__(self, PATH = "./Barnes_Hut/config_files/latest.ini"):
         self.path = PATH
         open(PATH)
         ConfigParser.__init__(self)

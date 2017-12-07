@@ -18,12 +18,14 @@ class Template_Loader(Config):
 
 def type_check(func):
     def wrapper(cls, value, string_type):
-        if string_type == 'float' or string_type == float:
+        if 'float' in string_type or string_type == float:
             con = float
-        elif string_type == 'int' or string_type == int:
+        elif 'int' in string_type or string_type == int:
             con = int
-        else:
+        elif 'string' in string_type:
             con = str
+        else:
+            raise
         return func(cls, value, con)
     return wrapper
 
@@ -46,11 +48,11 @@ class CheckValues():
     def _check(self, section, option, var):
         condition = self.check[section][option]
         try:
-            a = condition.split(" ")
+            a = condition.split(",")
         except:
             cont = self._validate(var, condition)
         else:
-            cont = self._validate(var, condition[0])
+            cont = self._validate(var, a[0])
         if not cont:
             self.all_good = False
 
@@ -63,6 +65,7 @@ class CheckValues():
                 if vt == float:
                     var.set(int(value))
                 else:
+
                     var.set("")
                     return False
             else:
@@ -76,8 +79,6 @@ class CheckValues():
         except:
             return value
         return val
-
-
 
 def __nose():
     tl = Template_Loader()

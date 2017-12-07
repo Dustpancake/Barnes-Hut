@@ -57,7 +57,6 @@ class ConfigHandler(Config):
     def _save(self):
         res = askyesno("Save?", "Do you really want to save?\nThis will override the existing.")
         if res == True:
-            print "WANTS TO SAVE?!"
             print self._display_var[0].get()
         else:
             pass
@@ -69,7 +68,6 @@ class ConfigHandler(Config):
     def DisplayConfig(self, vals):
         i = 0
         for v in self._display_var:
-            print "ving", v
             v.set(int(vals[i]))
             i+=1
     def GeneralValues(self, vals):

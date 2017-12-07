@@ -1,6 +1,7 @@
 from ConfigInput import *
 from PIL import Image, ImageTk
-
+from RunCached import Display
+from AboutWindow import AboutFrame
 
 _BG_COLOUR = '#%02x%02x%02x' % (20, 20, 20)
 _SAVE_PATH = "./Barnes_Hut/config_files/latest.ini"
@@ -19,7 +20,8 @@ class WelcomeLeft(Frame):
         OPTIONS = [("Run", self.start),
                    ("Open Config", self.display_config),
                    ("Load Config", self.load_config_file),
-                   ("About", 0),]
+                   ("Load Animation", self.frame_cache),
+                   ("About", self.make_about),]
         Frame.__init__(self, master, bg=_BG_COLOUR)
         i = 0
         self.title_font = tkFont.Font(family="Consolas", size=25, weight = 'bold')
@@ -86,8 +88,35 @@ class WelcomeLeft(Frame):
             self.buttons[1].config(text="Open Config")
             self.c_on = False
 
+    def frame_cache(self):
+        top = Toplevel(self)
+        top.resizable(False, False)
+        l = Display(top)
+        l.focus_set()
+        l.grab_set()
+        self.wait_window(l)
+        l.grab_release()
+
+    def make_about(self):
+        top = Toplevel(self)
+        top.resizable(False, False)
+        l = AboutFrame(top)
+        l.focus_set()
+        l.grab_set()
+        self.wait_window(l)
+        l.grab_release()
+
     def close_all(self):
         exit(0)
+
+class InfoWindow(Frame):
+    def __init__(self, parent):
+        Frame.__init__(self, parent)
+        self.grid()
+        with open("./Barnes_Hut/log.txt") as f:
+            text = f.read()
+        Label(self, text=text).grid()
+        Button(self, text="OK", command = lambda : parent.destroy()).grid()
 
 class MainWindow(Frame):
     grey = '#%02x%02x%02x' % (64, 64, 64)
@@ -117,5 +146,14 @@ class MainWindow(Frame):
         return self.canv
 
     def start(self):
-        self.mstr.start_simulation()
+        self.winfo_box()
+
+    def winfo_box(self):
+        top = Toplevel(self)
+        top.resizable(False, False)
+        l = InfoWindow(top)
+        l.focus_set()
+        l.grab_set()
+        self.wait_window(l)
+        l.grab_release()
 
