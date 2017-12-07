@@ -60,6 +60,7 @@ class Cacher(Thread):
 class Display(Frame, FileAccess):
     def __init__(self, master=None):
         Frame.__init__(self, master)
+        self.dest=False
         self.mstr=master
         self.pack()
         self.path = "./frames/"
@@ -97,12 +98,12 @@ class Display(Frame, FileAccess):
             self.make_log()
             self.b1 = Button(self, text="Start", width=20, command=self.render_frames, state=DISABLED)
             self.b1.pack()
-            self.b2 = Button(self, text="Quit", width=20, command=self.kill, state=DISABLED)
+            self.b2 = Button(self, text="Close Program", width=20, command=self.kill, state=DISABLED)
             self.b2.pack()
             self.cache_all()
 
     def kill(self):
-        self.mstr.destroy()
+        pass #TODO
 
     def cache_all(self):
         self.q1, self.q2 = Queue(), Queue()

@@ -325,6 +325,7 @@ class AdvancedConfig(Frame, _ConfigWidgetMethods, ConfigBuilder):
         self._tree_var = self.label_entry(vals.keys(), vals.values())
 
     def _galclose(self, top):
+        self.append_galaxies()
         if self.value_check():
             top.destroy()
 
@@ -333,11 +334,12 @@ class AdvancedConfig(Frame, _ConfigWidgetMethods, ConfigBuilder):
         top.resizable(False, False)
         l = Frame(top)
         l.grid()
-        Button(l, text="Close", command=lambda: self._galclose(top)).grid(columnspan=3)
+        Button(l, text="Close", command=lambda: self._galclose(top)).grid(columnspan=2)
+        Label(l, text="Exercise common sense:\nThese values are not checked and may raise errors").grid()
         self._srow=1
         self.t_diags = []
         for i in xrange(int(self._general_var["number of objects"].get())):
-            Label(l, text="GalaxyProperties"+str(i)).grid(row=self.galROW, columnspan=3)
+            Label(l, text="GalaxyProperties"+str(i)).grid(row=self.galROW, columnspan=2)
             self.galaxy_sections(l, i)
         l.focus_set()
         l.grab_set()
@@ -347,26 +349,24 @@ class AdvancedConfig(Frame, _ConfigWidgetMethods, ConfigBuilder):
 
     def galaxy_sections(self, parent, i):        #TODO
         row = self.galROW
-        a = Text(parent, height=7, width=60, wrap=WORD)
+        a = Text(parent, height=7, width=60, wrap=WORD, bg='#%02x%02x%02x' % (64, 64, 64), fg='white')
         text = self.get_gal(i)
-        scrollbar = Scrollbar(parent)
-        scrollbar.config(command=a.yview)
-        scrollbar.grid(row=row, column=2)
-        a.config(yscrollcommand=scrollbar.set)
         a.insert(END, text)
-        a.grid(row=row, column=0, columnspan=2)
+        a.grid(row=row, column=0, columnspan=1)
         self.t_diags.append(a)
 
     def get_gal(self, i):
-        if self._path == None or "template" in self._path: self._path = "./Barnes_Hut/config_files/latest.ini"
-        with open(self._path, 'r') as file:
-            text = file.read()
-        text = text.split("\n")
+        import time
         while True:
             try:
+                with open(self._path, 'r') as file:
+                    text = file.read()
+                text = text.split("\n")
                 i = text.index("[GalaxyProperties"+str(i)+"]")
             except:
-                pass#self.append_new_galaxy(i)
+                print "does not exist", i
+                time.sleep(1)
+                self.append_new_galaxy(i)
             else:
                 break
         text = text[i+1:i+9]
@@ -379,20 +379,38 @@ class AdvancedConfig(Frame, _ConfigWidgetMethods, ConfigBuilder):
         return self._srow
 
     def append_new_galaxy(self, i):
-        print "appending new"
         text = "\n[GalaxyProperties"+str(i)+"]\nlocation = 500, 410\nvelocity = 0, 0\nsize = 99\nblack hole mass factor = 10000\nblack hole colour = grey\nblack hole scale = 5\nvelocity factor = 0.5\nvelocity method = none"
+        print text
         with open(self._path, 'a') as file:
             file.write(text)
 
-    def append_galaxy(self):
+    def append_galaxies(self):
         with open(self._path, 'r') as file:
             text = file.read()
-
-
+        text = text.split("\n")
+        try:
+            i = text.index("[GalaxyProperties0]")
+        except:
+            pass
+        else:
+            text = text[:i]
+        i = 0
+        for diag in self.t_diags:
+            gal = diag.get("1.0", 'end-1c')
+            gal = gal.split("\n")
+            section = "\n[GalaxyProperties"+str(i)+"]"
+            l = [section]+gal
+            print l
+            l = "\n".join(l)
+            text.append(l)
+            i+=1
+        text = "\n".join(text)
+        with open(self._path, 'w') as file:
+            file.write(text)
 
     def new_dialog(self, *event):
         if self._random_var['method'].get() == 'galaxy':
-            self._general_var["number of objects"].set(1)
+            self._general_var["number of objects"].set(self.num_galax())
             self.b1 = Button(self, text="Galaxy Config", command = self.GalaxyProperties, font=self.font, bg=self.colour, highlightbackground=self.colour)
             self.b1.grid(row = self._galaxyrow, column = 2, columnspan =2, sticky=E)
             self.l1 = Label(self, text="NOTE: number of objects is now number of galaxies", font= self.font, bg = self.colour, highlightbackground=self.colour)
@@ -404,6 +422,17 @@ class AdvancedConfig(Frame, _ConfigWidgetMethods, ConfigBuilder):
             except:
                 pass
             self._general_var["number of objects"].set(1000)
+
+    def num_galax(self):
+        if self._path == None or "template" in self._path: self._path = "./Barnes_Hut/config_files/latest.ini"
+        with open(self._path, 'r') as file:
+            text = file.read()
+        text = text.split("\n")
+        i = 0
+        for t in text:
+            if "[GalaxyProperties" in t:
+                i+=1
+        return i
 
     def _done(self):  #TODO
         if self.value_check():

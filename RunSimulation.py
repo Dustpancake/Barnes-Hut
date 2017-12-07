@@ -12,12 +12,14 @@ def run(frame):
     window = grph.Graphics(frame)
     t = time() - t
     print "Class creation took {}s".format(t)
+    print "Rendering window..."
 
     t = time()
     window.add_stars()
     window.add_tree()
     t = time() - t
     print "Rendering took {}s".format(t)
+    print "Starting Tkinter... this may take a while"
     return window
 
 

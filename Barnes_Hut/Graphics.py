@@ -74,8 +74,8 @@ class Graphics(Frame):
     def close(self):
         while True:
             try:
-                self.logic.terminate()
+                self.logic.close()
             except: raise
             else:
-                return
+                self.logic.terminate()
 

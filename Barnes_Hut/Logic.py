@@ -92,8 +92,7 @@ class LogicHandler(Process, object):
             else:
                 return val
 
-    def terminate(self):
+    def close(self):
         self.tree.kill()
-        super(LogicHandler, self).terminate()
 
 
