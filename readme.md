@@ -1,6 +1,7 @@
 # Barnes-Hut Python Simulations
 
-**THE CURRENT VERSION IS INCOMPATIBLE WITH PYTHON2**
+**THE CURRENT VERSION IS INCOMPATIBLE and unfortunately does not run**
+
 I mean for a start python2 is discontinued, but I tried running this software again in 2020. The PIL and pillow libraries have changed drastically, even within python2, and since I was still new to python development when I wrote this code, I didn't understand the importance of correctly documenting dependencies. As such, I am just leaving this here for legacy -- I may update it one day for a laugh, but for now it remains testimony to my coding origins :)
 
 Created by FB Nov/Dec 2017 for PH2140 at Royal Holloway   
